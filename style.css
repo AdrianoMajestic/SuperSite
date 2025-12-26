@@ -1,832 +1,711 @@
 :root {
-    --bg: #f8fafc;
-    --text: #0f172a;
-    --header-bg: rgba(255, 255, 255, 0.95);
-    --accent: #6366f1;
-    --card-bg: #ffffff;
-    --footer-bg: #0f172a;
-    --nav-text: #475569;
-    --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    /* ТЕМНАЯ ТЕМА (Глубокий космос) */
+    --bg-color: #0d1117;       /* Очень темный сине-черный */
+    --container-bg: #161b22;   /* Цвет панелей */
+    --text-color: #c9d1d9;     /* Светло-серый текст (меньше контраста, лучше для глаз) */
+    --accent-color: #58a6ff;   /* Спокойный голубой */
+    --header-bg: #010409;      /* Почти черный для шапки */
+    --card-bg: #21262d;        /* Цвет карточек */
+    --border-color: #30363d;   /* Границы */
+    --shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+    --transition: all 0.4s ease;
+    --logo-gradient-start: #ffffff;
+    
 }
 
-[data-theme="dark"] {
-    --bg: #020617;
-    --text: #f1f5f9;
-    --header-bg: rgba(15, 23, 42, 0.95);
-    --card-bg: #1e293b;
-    --nav-text: #94a3b8;
+/* СВЕТЛАЯ ТЕМА: "Futuristic Frost" (Матовое стекло / Светлый металл) */
+body.light-theme {
+    --bg-color: #d1d9e6;       /* Мягкий цвет "холодная сталь" */
+    --container-bg: rgba(236, 240, 243, 0.7); /* Эффект матового стекла */
+    --text-color: #444b5a;     /* Глубокий серо-синий текст */
+    --accent-color: #5d5fef;   /* Насыщенный индиго */
+    --header-bg: #e0e5ec;      /* Цвет алюминия */
+    --card-bg: #e6ebf1;        /* Выпуклые "металлические" карточки */
+    --border-color: #b8c2d1;
+    --shadow: 10px 10px 20px #b8b9be, -10px -10px 20px #ffffff; /* Эффект неуморфизма */
+    --logo-gradient-start: #2d3436;
 }
 
-* { 
-    margin: 0; 
-    padding: 0; 
-    box-sizing: border-box; 
+/* ЭФФЕКТ СТЕКЛА ДЛЯ КАРТОЧЕК */
+.card {
+    background: var(--card-bg);
+    backdrop-filter: blur(10px); /* Размытие фона за карточкой */
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow);
+    /* ... остальные стили из прошлого кода ... */
+}
+/* Добавим небольшое свечение кнопкам в темной теме для "технологичности" */
+body:not(.light-theme) .btn {
+    box-shadow: 0 0 10px rgba(88, 166, 255, 0.3);
 }
 
-html {
-    scroll-behavior: smooth;
-    overflow-x: hidden;
+/* Улучшим читаемость ссылок в светлой теме */
+body.light-theme nav a:hover, body.light-theme nav a.active {
+    background: var(--accent-color);
+    color: #fff;
+}
+/* 2. СБРОС СТИЛЕЙ И БАЗА */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 body {
-    font-family: 'Inter', sans-serif;
-    background-color: var(--bg);
-    color: var(--text);
-    transition: background-color 0.4s;
-    overflow-x: hidden;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     line-height: 1.6;
+    transition: var(--transition);
 }
 
-body.lock { 
-    overflow: hidden; 
+/* 3. СЕТКА CSS GRID [cite: 55-68] */
+.grid-container {
+    display: grid;
+    /* Три колонки: боковое меню, контент, инфо-панель */
+    grid-template-columns: 240px 1fr 280px;
+    grid-template-rows: auto 1fr auto;
+    grid-template-areas: 
+        "header header header"
+        "nav    main   aside"
+        "footer footer footer";
+    min-height: 100vh;
+    gap: 0; /* Убираем зазоры для монолитного вида, добавим отступы внутри */
 }
 
-.container { 
-    max-width: 1200px; 
-    margin: 0 auto; 
-    padding: 0 20px; 
-}
+/* 4. ОСНОВНЫЕ ОБЛАСТИ [cite: 63-68] */
+/* --- НОВЫЙ ФУТУРИСТИЧНЫЙ ХЭДДЕР --- */
 
-/* ===== Skip Link ===== */
-.skip-link {
-    position: absolute;
-    top: -100px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: var(--accent);
-    color: white;
-    padding: 10px 20px;
-    z-index: 5000;
-    text-decoration: none;
-    border-radius: 0 0 10px 10px;
-    transition: top 0.3s;
-}
-.skip-link:focus { 
-    top: 0; 
-}
-
-/* ===== Header ===== */
-.header {
-    position: fixed;
+header {
+    grid-area: header;
+    padding: 15px 30px;
+    display: flex;
+    justify-content: center; /* Центрируем плавающий блок */
+    align-items: center;
+    position: sticky;
     top: 0;
-    left: 0;
-    right: 0;
     z-index: 1000;
-    background: var(--header-bg);
-    border-bottom: 1px solid rgba(100, 116, 139, 0.1);
-    padding: 15px 0;
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    /* Убираем сплошной фон, оставляем прозрачность для эффекта полета */
+    background: transparent; 
 }
 
-.header.scrolled {
-    padding: 10px 0;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-}
-
-.header-container {
+.header-content {
+    width: 100%;
+    max-width: 1400px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-}
-
-.logo { 
-    font-size: 22px; 
-    font-weight: 800;
-    z-index: 2001;
-}
-.logo span { 
-    color: var(--accent); 
-}
-
-/* ===== Navigation ===== */
-.nav { 
-    display: flex; 
-    align-items: center; 
-    gap: 30px; 
-}
-
-.nav-link {
-    color: var(--nav-text);
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 15px;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 5px;
+    padding: 12px 25px;
+    
+    /* Эффект матового стекла (Glassmorphism) */
+    background: var(--container-bg);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    
+    /* Скругление и тонкая неоновая граница */
+    border-radius: 50px; /* Делаем хэдер овальным/капсульным */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    
+    /* Тень для объема */
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
     transition: var(--transition);
-    padding: 8px 0;
 }
 
-.nav-link:hover, 
-.nav-link.active { 
-    color: var(--accent); 
+/* Эффект при скролле (опционально: можно добавить через JS, но и так будет работать) */
+header:hover .header-content {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 20px rgba(0, 242, 255, 0.2);
 }
 
-/* ===== Theme Toggle ===== */
-.theme-toggle-header {
-    width: 50px;
-    height: 26px;
-    background: rgba(100, 116, 139, 0.2);
-    border: none;
-    border-radius: 20px;
-    position: relative;
-    cursor: pointer;
-    padding: 0;
-    transition: background 0.3s;
-}
-
-.theme-toggle-header:hover {
-    background: rgba(100, 116, 139, 0.3);
-}
-
-.toggle-circle {
-    width: 20px;
-    height: 20px;
-    background: var(--accent);
-    border-radius: 50%;
-    position: absolute;
-    left: 3px;
-    top: 3px;
+/* Логотип */
+.logo {
     display: flex;
     align-items: center;
+    gap: 12px;
+}
+
+.logo-icon {
+    font-size: 1.5rem;
+    color: var(--accent-color);
+    text-shadow: 0 0 10px var(--accent-color);
+    animation: pulse 2s infinite;
+}
+
+.logo h1 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 3px;
+    /* Используем переменную для начала градиента */
+    background: linear-gradient(90deg, var(--logo-gradient-start), var(--accent-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    
+    /* Добавляем очень тонкую тень, чтобы буквы не "пропадали" */
+    filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.1));
+    transition: var(--transition);
+}
+
+/* Дополнительно для светлой темы сделаем иконку чуть ярче, чтобы она не терялась */
+body.light-theme .logo-icon {
+    color: var(--accent-color);
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+.header-content {
+    /* ... твои старые стили ... */
+    border: 1px solid rgba(128, 128, 128, 0.2); /* Сделаем границу чуть заметнее */
+}
+
+body.light-theme .header-content {
+    background: rgba(255, 255, 255, 0.6); /* Чуть более плотное стекло для светлой темы */
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+/* Стили кнопки переключения в новом хэдере */
+.theme-btn {
+    border: none;
+    background: rgba(255, 255, 255, 0.05);
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    display: flex;
     justify-content: center;
-    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    align-items: center;
+    cursor: pointer;
+    transition: var(--transition);
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.toggle-circle span { 
-    font-size: 11px; 
-    position: absolute; 
+.theme-btn:hover {
+    background: var(--accent-color);
+    color: #000;
+    transform: rotate(15deg);
 }
 
-[data-theme="dark"] .toggle-circle { 
-    transform: translateX(24px); 
-}
-[data-theme="dark"] .moon { 
-    opacity: 0; 
-}
-[data-theme="light"] .sun { 
-    opacity: 0; 
+/* Анимация пульсации иконки */
+@keyframes pulse {
+    0% { opacity: 0.6; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.2); }
+    100% { opacity: 0.6; transform: scale(1); }
 }
 
-/* ===== Dropdown ===== */
-.dropdown { 
-    position: relative; 
+/* Адаптивность для хэдера */
+@media (max-width: 768px) {
+    header {
+        padding: 10px 15px;
+    }
+    .logo h1 {
+        font-size: 1.1rem;
+    }
 }
 
-.dropdown-menu {
-    position: absolute;
-    top: 45px;
-    right: 0;
-    background: var(--card-bg);
-    border-radius: 12px;
-    min-width: 180px;
-    display: none;
-    flex-direction: column;
-    padding: 10px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-    border: 1px solid rgba(100, 116, 139, 0.1);
-    z-index: 100;
+nav {
+    grid-area: nav;
+    background: var(--container-bg);
+    padding: 2rem;
+    border-right: 1px solid var(--border-color);
 }
 
-.dropdown.open .dropdown-menu { 
-    display: flex; 
+main {
+    grid-area: main;
+    padding: 2rem;
+    background: var(--bg-color);
 }
 
-.dropdown-menu a {
-    color: var(--nav-text);
-    padding: 10px;
+aside {
+    grid-area: aside;
+    background: var(--container-bg);
+    padding: 2rem;
+    border-left: 1px solid var(--border-color);
+}
+
+footer {
+    grid-area: footer;
+    background: var(--header-bg);
+    padding: 1.5rem;
+    text-align: center;
+    border-top: 1px solid var(--border-color);
+    font-size: 0.9rem;
+}
+
+/* 5. НАВИГАЦИЯ И ССЫЛКИ [cite: 78-83] */
+nav ul {
+    list-style: none;
+    position: sticky;
+    top: 100px;
+}
+
+nav ul li {
+    margin-bottom: 1rem;
+}
+
+nav a {
+    color: var(--text-color);
     text-decoration: none;
+    font-weight: 500;
+    display: block;
+    padding: 0.5rem 1rem;
     border-radius: 8px;
     transition: var(--transition);
 }
 
-.dropdown-menu a:hover { 
-    background: var(--accent); 
-    color: white; 
+nav a:hover, nav a.active {
+    background: var(--accent-color);
+    color: #000;
+    transform: translateX(5px);
 }
 
-.arrow {
-    font-size: 10px;
-    transition: transform 0.3s;
-}
-
-.dropdown.open .arrow {
-    transform: rotate(180deg);
-}
-
-/* ===== Burger Menu Button ===== */
-.burger {
-    display: none;
-    flex-direction: column;
-    justify-content: space-between;
-    width: 30px;
-    height: 20px;
-    background: transparent;
-    border: none;
+/* 6. ПЕРЕКЛЮЧАТЕЛЬ ТЕМЫ (КНОПКА) */
+.theme-btn {
+    background: var(--card-bg);
+    border: 1px solid var(--accent-color);
+    color: var(--text-color);
+    padding: 10px 15px;
+    border-radius: 50px;
     cursor: pointer;
-    padding: 0;
-    z-index: 2000;
-    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: var(--transition);
+    font-size: 1.2rem;
 }
 
-.burger span {
-    width: 100%;
-    height: 2px;
-    background: var(--text);
-    border-radius: 2px;
-    transition: all 0.3s ease;
-    transform-origin: left;
+.theme-btn:hover {
+    box-shadow: 0 0 15px var(--accent-color);
 }
 
-/* Анимация крестика */
-.burger.open span:nth-child(1) {
-    transform: rotate(45deg);
-}
-.burger.open span:nth-child(2) {
-    opacity: 0;
-    transform: translateX(-10px);
-}
-.burger.open span:nth-child(3) {
-    transform: rotate(-45deg);
-}
+/* Логика иконок: скрываем лишнее */
+body.light-theme .icon-sun { display: none; }
+body:not(.light-theme) .icon-moon { display: none; }
 
-/* ===== Menu Overlay ===== */
-.menu-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    display: none;
-    z-index: 1400;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.menu-overlay.show {
-    display: block;
-    opacity: 1;
-}
-
-/* ===== Hero Section ===== */
-.hero { 
-    padding: 180px 0 100px; 
-    text-align: center; 
-}
-
-.badge { 
-    background: rgba(99, 102, 241, 0.1); 
-    color: var(--accent); 
-    padding: 8px 20px; 
-    border-radius: 20px; 
-    font-weight: 600;
-    display: inline-block;
-    font-size: 14px;
-}
-
-.hero h1 { 
-    font-size: clamp(2rem, 5vw, 3.5rem);
-    margin: 20px 0; 
-    font-weight: 800;
-    line-height: 1.2;
-}
-
-.hero p { 
-    max-width: 600px; 
-    margin: 0 auto 30px; 
-    font-size: clamp(1rem, 2vw, 1.1rem);
-    opacity: 0.8; 
-}
-
-.hero-btns { 
-    display: flex; 
-    justify-content: center; 
-    gap: 15px;
-    flex-wrap: wrap;
-}
-
-.btn { 
-    padding: 14px 28px; 
-    border-radius: 10px; 
-    text-decoration: none; 
-    font-weight: 600; 
-    transition: all 0.3s ease;
-    display: inline-block;
-}
-
-.btn-primary { 
-    background: var(--accent); 
-    color: white; 
-}
-
-.btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(99, 102, 241, 0.3);
-}
-
-.btn-outline { 
-    border: 2px solid var(--accent); 
-    color: var(--accent);
-    background: transparent;
-}
-
-.btn-outline:hover {
-    background: var(--accent);
-    color: white;
-}
-
-/* ===== Section Header ===== */
-.section-header {
-    text-align: center;
-    margin-bottom: 60px;
-}
-
-.section-header .badge {
-    margin-bottom: 15px;
-}
-
-.section-header h2 {
-    font-size: clamp(2rem, 4vw, 2.8rem);
-    font-weight: 800;
-    margin: 15px 0;
-    line-height: 1.2;
-}
-
-.section-header p {
-    font-size: 1.1rem;
-    opacity: 0.7;
-    max-width: 600px;
-    margin: 0 auto;
-}
-
-/* ===== Services Section ===== */
-.services-section {
-    padding: 100px 0;
-    background: linear-gradient(180deg, transparent 0%, rgba(99, 102, 241, 0.03) 100%);
-}
-
-.services { 
+/* 7. КАРТОЧКИ И КОНТЕНТ [cite: 86-89, 108] */
+.card-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 30px; 
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+    margin-top: 2rem;
 }
 
-.card { 
-    background: var(--card-bg); 
-    padding: 45px 35px; 
-    border-radius: 20px; 
-    text-align: center; 
-    transition: all 0.3s ease; 
-    border: 1px solid rgba(100, 116, 139, 0.1);
+.card {
+    background: var(--card-bg);
+    padding: 2rem;
+    border-radius: 15px;
+    border: 1px solid var(--border-color);
+    transition: var(--transition);
+}
+
+.card:hover {
+    transform: translateY(-10px);
+    border-color: var(--accent-color);
+    box-shadow: var(--shadow);
+}
+
+.card h3 {
+    color: var(--accent-color);
+    margin-bottom: 1rem;
+}
+
+/* 8. ФОРМЫ И КНОПКИ  */
+input, textarea {
+    width: 100%;
+    padding: 12px;
+    margin-top: 8px;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+    border-radius: 8px;
+}
+
+.btn {
+    background: var(--accent-color);
+    color: #000;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: var(--transition);
+    display: inline-block;
+    text-decoration: none;
+    margin-top: 1rem;
+}
+
+.btn:hover {
+    filter: brightness(1.2);
+    transform: scale(1.02);
+}
+
+/* 9. АДАПТИВНОСТЬ [cite: 127-132, 206-216] */
+@media (max-width: 1100px) {
+    .grid-container {
+        grid-template-columns: 200px 1fr;
+        grid-template-areas: 
+            "header header"
+            "nav    main"
+            "nav    aside"
+            "footer footer";
+    }
+}
+
+@media (max-width: 768px) {
+    .grid-container {
+        grid-template-columns: 1fr;
+        grid-template-areas: 
+            "header"
+            "nav"
+            "main"
+            "aside"
+            "footer";
+    }
+
+    nav ul {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: center;
+    }
+}
+/* Стили для иконок в карточках */
+.card .icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    filter: drop-shadow(0 0 5px var(--accent-color));
+}
+
+/* Настройка сетки: 3 колонки на ПК, 2 на планшете, 1 на телефоне */
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+    margin-top: 2rem;
+}
+
+/* Улучшение читаемости заголовков в карточках */
+.card h3 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+}
+/* --- Стили для страницы "О компании" (Задание 6) --- */
+
+.about-section {
+    display: grid;
+    /* Разделение на две колонки: текст (1.2 части) и фото (1 часть) */
+    grid-template-columns: 1.2fr 1fr; 
+    gap: 40px;
+    align-items: center; /* Выравнивание по вертикали */
     position: relative;
-    overflow: hidden;
+    padding-top: 20px;
 }
 
-.card::before {
-    content: '';
+.about-text {
+    position: relative;
+    padding-left: 30px; /* Место для декоративной полосы */
+}
+
+/* Декоративная полоса ::before по заданию */
+.about-text::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 4px;
+    height: 100%;
+    background: var(--accent-color); /* Использует наш основной цвет темы */
+    border-radius: 2px;
+    box-shadow: 0 0 10px var(--accent-color); /* Легкое свечение */
+}
+
+.about-text h2 {
+    margin-bottom: 20px;
+    font-size: 2.5rem;
+}
+
+.about-text p {
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+    opacity: 0.9;
+}
+
+/* --- ФУТУРИСТИЧНАЯ ОБВОДКА (Задание 6+) --- */
+
+.image-frame {
+    position: relative;
+    padding: 10px; /* Отступ для видимости рамки */
+    display: inline-block;
+    width: 100%;
+}
+
+/* Внешний светящийся контур */
+.image-frame::before {
+    content: "";
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
-    height: 4px;
-    background: linear-gradient(90deg, var(--accent), #4338ca);
-    transform: scaleX(0);
-    transition: transform 0.3s ease;
+    bottom: 0;
+    border-radius: 25px;
+    padding: 2px; /* Толщина рамки */
+    background: linear-gradient(135deg, var(--accent-color), transparent, var(--accent-color));
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0.5;
+    transition: var(--transition);
 }
 
-.card:hover::before {
-    transform: scaleX(1);
-}
-
-.card:hover { 
-    transform: translateY(-10px); 
-    border-color: var(--accent);
-    box-shadow: 0 15px 40px rgba(99, 102, 241, 0.15);
-}
-
-.card .icon {
-    font-size: 3rem;
-    margin-bottom: 20px;
-}
-
-.card h3 {
-    font-size: 1.4rem;
-    margin-bottom: 15px;
-    font-weight: 700;
-    color: var(--text);
-}
-
-.card p {
-    opacity: 0.8;
-    line-height: 1.6;
-}
-
-/* ===== About Section ===== */
-.about-section {
-    padding: 80px 20px;
-}
-
-.about-flex {
-    display: flex;
-    align-items: center;
-    gap: 60px;
-}
-
-.about-content {
-    flex: 1;
-}
-
-.about-content h2 {
-    font-size: clamp(1.8rem, 4vw, 2.5rem);
-    margin: 20px 0;
-    line-height: 1.2;
-    font-weight: 800;
-}
-
-.about-content p {
-    opacity: 0.8;
-    margin: 20px 0;
-    line-height: 1.7;
-}
-
-.about-stats {
-    display: flex;
-    gap: 30px;
-    margin-top: 40px;
-    flex-wrap: wrap;
-}
-
-.stat-item h4 {
-    font-size: 1.8rem;
-    color: var(--accent);
-    margin-bottom: 5px;
-    font-weight: 800;
-}
-
-.stat-item p {
-    font-size: 0.9rem;
-    opacity: 0.7;
-}
-
-.about-image-box {
-    flex: 1;
+.image-wrapper {
     position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 350px;
-}
-
-.abstract-shape {
     width: 100%;
-    max-width: 400px;
-    height: 350px;
-    background: linear-gradient(135deg, var(--accent) 0%, #4338ca 100%);
-    border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
-    filter: blur(40px);
-    opacity: 0.2;
-    animation: morph 8s ease-in-out infinite;
-}
-
-@keyframes morph {
-    0% { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; }
-    50% { border-radius: 50% 50% 33% 67% / 55% 27% 73% 45%; }
-    100% { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; }
-}
-
-.experience-badge {
-    position: absolute;
-    background: var(--card-bg);
-    padding: 25px 35px;
+    height: 400px;
     border-radius: 20px;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
-    font-weight: 800;
-    font-size: 1.2rem;
-    border: 1px solid rgba(100, 116, 139, 0.2);
+    overflow: hidden;
+    /* Внутренняя тонкая рамка */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: var(--shadow);
+    z-index: 1;
 }
 
-/* ===== Footer ===== */
-.footer { 
-    background: var(--footer-bg); 
-    color: #94a3b8; 
-    padding: 60px 0 20px; 
+/* Декоративные "уголки" (Cyberpunk style) */
+.image-frame::after {
+    content: "";
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    width: 40px;
+    height: 40px;
+    border-top: 3px solid var(--accent-color);
+    border-right: 3px solid var(--accent-color);
+    border-radius: 0 15px 0 0;
+    transition: var(--transition);
+    z-index: 2;
 }
 
-.footer-grid { 
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 40px;
-    margin-bottom: 40px;
+/* Эффекты при наведении */
+.image-frame:hover::before {
+    opacity: 1;
+    filter: drop-shadow(0 0 10px var(--accent-color));
 }
 
-.footer-col { 
-    flex: 1; 
+.image-frame:hover::after {
+    transform: translate(10px, -10px);
+    filter: drop-shadow(0 0 5px var(--accent-color));
 }
 
-.footer-title { 
-    color: white; 
-    font-weight: 700; 
-    font-size: 18px; 
-    margin-bottom: 20px; 
-    background: none; 
-    border: none; 
-    text-align: left; 
-    font-family: inherit;
-    cursor: default;
-    padding: 0;
+.image-frame:hover .image-wrapper img {
+    transform: scale(1.1);
+    filter: brightness(1.1);
+}
+
+/* Адаптация для светлой темы */
+body.light-theme .image-frame::before {
+    background: linear-gradient(135deg, var(--accent-color), #ccc, var(--accent-color));
+    opacity: 0.8;
+}
+
+body.light-theme .image-frame::after {
+    border-color: var(--accent-color);
+}
+
+.image-wrapper img {
     width: 100%;
-    display: block;
+    height: 100%;
+    object-fit: cover; /* Фото заполнит блок без искажений */
+    transition: var(--transition);
 }
 
-.footer-content {
-    display: block;
+.image-wrapper:hover img {
+    transform: scale(1.05); /* Легкий зум при наведении */
 }
 
-.footer-content a { 
-    display: block; 
-    color: #94a3b8; 
-    text-decoration: none; 
-    margin-bottom: 10px;
-    transition: color 0.3s;
-}
-
-.footer-content a:hover {
-    color: var(--accent);
-}
-
-.footer-content p {
-    margin-bottom: 10px;
-    line-height: 1.6;
-}
-
-.footer-bottom { 
-    border-top: 1px solid rgba(255,255,255,0.05); 
-    padding-top: 20px; 
-    text-align: center; 
-    font-size: 14px;
-    opacity: 0.7;
-}
-
-/* ===== RESPONSIVE DESIGN ===== */
-
-/* Планшеты и небольшие ноутбуки */
-@media (max-width: 1024px) {
-    .container {
-        padding: 0 30px;
-    }
-    
-    .hero {
-        padding: 80px 0;
-    }
-    
-    .about-flex {
-        gap: 40px;
-    }
-}
-
-/* Мобильные устройства */
+/* Адаптация для планшетов и телефонов */
 @media (max-width: 850px) {
-    /* Показываем бургер */
-    .burger { 
-        display: flex; 
-    }
-
-    /* Мобильное меню - шторка справа */
-    .nav {
-        position: fixed;
-        top: 0;
-        right: 0;
-        width: 280px;
-        height: 100vh;
-        background: var(--card-bg);
-        padding: 80px 20px 40px;
-        flex-direction: column;
-        align-items: center;
+    .about-section {
+        grid-template-columns: 1fr; /* В одну колонку на маленьких экранах */
         gap: 20px;
-        
-        /* Скрыто по умолчанию */
-        transform: translateX(100%);
-        transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        z-index: 1500;
-        
-        box-shadow: -5px 0 25px rgba(0,0,0,0.15);
-        overflow-y: auto;
-    }
-
-    .nav.open {
-        transform: translateX(0);
-    }
-
-    .nav-link {
-        width: 100%;
-        justify-content: center;
-        font-size: 1.1rem;
-        padding: 12px 0;
-    }
-
-    /* Dropdown в мобильном меню */
-    .dropdown {
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
     }
     
-    .dropdown-btn {
-        width: 100%;
-        justify-content: center;
+    .image-wrapper {
+        height: 250px;
     }
+}
+/* Контейнер контактов */
+.contact-container {
+    display: grid;
+    /* Делаем колонку с формой чуть шире, а колонку с инфо и картой — чуть уже */
+    grid-template-columns: 1.2fr 0.8fr; 
+    gap: 40px;
+    align-items: start;
+    margin-top: 30px;
+}
 
-    .dropdown-menu {
-        position: static;
-        width: 100%;
-        box-shadow: none;
-        background: rgba(0,0,0,0.03);
-        display: none;
-        opacity: 1;
-        transform: none;
-        margin-top: 5px;
-    }
+/* Обертка для инфо и карты */
+.contact-info {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* 1. БАЗОВАЯ ОБЕРТКА КАРТЫ (ТЕМНАЯ ТЕМА ПО УМОЛЧАНИЮ) */
+.map-wrapper {
+    width: 100%;
+    aspect-ratio: 1 / 1; 
+    max-height: 450px;
+    border-radius: 30px;
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow);
+    transition: transform 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease; /* Убрали фильтр из транзишн, чтобы не было мерцания */
     
-    .dropdown.open .dropdown-menu {
-        display: flex;
-    }
+    /* Карта инвертирована ВСЕГДА */
+    filter: grayscale(0.5) invert(0.92) contrast(1.2);
+}
 
-    /* Hero секция */
-    .hero {
-        padding: 140px 0 60px;
-    }
+/* 2. ПРИ НАВЕДЕНИИ В ТЕМНОЙ ТЕМЕ */
+.map-wrapper:hover {
+    transform: translateY(-5px);
+    border-color: var(--accent-color);
+    box-shadow: 0 10px 30px rgba(0, 242, 255, 0.2);
+    /* Фильтр НЕ прописываем, он наследуется сверху и остается инвертированным */
+}
 
-    .hero h1 {
-        font-size: 2rem;
-    }
+/* 3. СВЕТЛАЯ ТЕМА (ПЕРЕБИВАЕМ ИНВЕРСИЮ) */
+body.light-theme .map-wrapper {
+    filter: none !important; /* !important гарантирует, что инверсия отключится */
+}
 
-    .hero-btns {
-        flex-direction: column;
-        align-items: center;
-    }
+/* 4. ПРИ НАВЕДЕНИИ В СВЕТЛОЙ ТЕМЕ */
+body.light-theme .map-wrapper:hover {
+    filter: none !important; /* Гарантируем, что при наведении в светлой теме инверсия не включится */
+    border-color: var(--accent-color);
+    box-shadow: 10px 10px 20px #b8b9be;
+}
+/* --- СТИЛИ ФУТЕРА (Задание 9) --- */
 
-    .btn {
-        width: 100%;
-        max-width: 300px;
+footer {
+    grid-area: footer;
+    background: var(--header-bg);
+    padding: 40px 20px;
+    border-top: 1px solid var(--border-color);
+    margin-top: 40px;
+}
+
+.footer-grid {
+    display: grid;
+    /* Три колонки на ПК */
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.footer-section h4 {
+    color: var(--accent-color);
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 0.9rem;
+}
+
+.footer-section p {
+    font-size: 0.85rem;
+    margin-bottom: 8px;
+    opacity: 0.8;
+}
+
+/* Социальные сети и анимация */
+.social-icons {
+    display: flex;
+    gap: 15px;
+}
+
+.social-link {
+    text-decoration: none;
+    color: var(--text-color);
+    background: var(--card-bg);
+    padding: 10px 15px;
+    border-radius: 10px;
+    border: 1px solid var(--border-color);
+    font-size: 0.8rem;
+    transition: var(--transition); /* Плавность из нашего root */
+}
+
+/* Анимация по заданию: увеличение при наведении */
+.social-link:hover {
+    transform: scale(1.2); 
+    color: var(--accent-color);
+    border-color: var(--accent-color);
+    box-shadow: 0 0 15px rgba(0, 242, 255, 0.3);
+}
+
+.copyright {
+    margin-top: 20px;
+    font-size: 0.75rem !important;
+    opacity: 0.5 !important;
+}
+
+/* --- АДАПТИВНОСТЬ ФУТЕРА --- */
+
+@media (max-width: 768px) {
+    .footer-grid {
+        /* Одна колонка на телефоне по заданию */
+        grid-template-columns: 1fr;
         text-align: center;
     }
 
-    /* Services секция */
-    .services-section {
-        padding: 60px 0;
-    }
-
-    .section-header {
-        margin-bottom: 40px;
-    }
-
-    .services {
-        grid-template-columns: 1fr;
-        gap: 20px;
-    }
-
-    .card {
-        padding: 35px 25px;
-    }
-
-    /* About секция */
-    .about-section {
-        padding: 60px 20px;
-    }
-
-    .about-flex { 
-        flex-direction: column; 
-        text-align: center; 
-        gap: 40px;
-    }
-
-    .about-content {
-        order: 1;
-    }
-
-    .about-stats { 
+    .social-icons {
         justify-content: center;
-        gap: 20px;
-    }
-
-    .about-image-box { 
-        order: 2;
-        width: 100%;
-        min-height: 300px;
-    }
-
-    .abstract-shape {
-        height: 300px;
-    }
-
-    .experience-badge {
-        font-size: 1rem;
-        padding: 20px 25px;
-    }
-
-    /* Footer аккордеон */
-    .footer {
-        padding: 40px 0 20px;
-    }
-
-    .footer-grid {
-        grid-template-columns: 1fr;
-        gap: 0;
-    }
-
-    .footer-col {
-        border-bottom: 1px solid rgba(255,255,255,0.1);
-        padding: 15px 0;
-    }
-
-    .footer-title {
-        cursor: pointer;
-        position: relative;
-        padding-right: 30px;
-        transition: color 0.3s;
-    }
-
-    .footer-title::after {
-        content: '▾';
-        position: absolute;
-        right: 0;
-        top: 50%;
-        transform: translateY(-50%);
-        transition: transform 0.3s;
-    }
-
-    .footer-col.open .footer-title::after {
-        transform: translateY(-50%) rotate(180deg);
-    }
-
-    .footer-content {
-        display: none;
-        padding-top: 15px;
-        animation: slideDown 0.3s ease;
-    }
-
-    .footer-col.open .footer-content {
-        display: block;
-    }
-
-    @keyframes slideDown {
-        from {
-            opacity: 0;
-            transform: translateY(-10px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
     }
 }
-
-/* Очень маленькие экраны */
-@media (max-width: 480px) {
-    .container {
-        padding: 0 15px;
-    }
-
-    .logo {
-        font-size: 18px;
-    }
-
-    .hero {
-        padding: 120px 0 40px;
-    }
-
-    .card {
-        padding: 30px 20px;
-    }
-
-    .card .icon {
-        font-size: 2.5rem;
-    }
-
-    .about-stats {
-        flex-direction: column;
-        gap: 15px;
-    }
+/* --- КНОПКА "НАВЕРХ" --- */
+.back-to-top {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: var(--accent-color);
+    color: #000;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    box-shadow: 0 5px 15px rgba(0, 242, 255, 0.4);
+    z-index: 1001;
+    
+    /* Начальное состояние: скрыта */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px);
+    transition: var(--transition);
 }
 
-/* Плавное появление контента */
-@keyframes fadeIn {
-    from { 
-        opacity: 0; 
-        transform: translateY(20px); 
-    }
-    to { 
-        opacity: 1; 
-        transform: translateY(0); 
-    }
+/* Состояние, когда кнопка видна (добавляется через JS) */
+.back-to-top.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
 }
 
-main section {
-    animation: fadeIn 0.8s ease forwards;
+.back-to-top:hover {
+    transform: translateY(-5px) scale(1.1);
+    box-shadow: 0 8px 25px rgba(0, 242, 255, 0.6);
+}
+
+.back-to-top .arrow {
+    transition: transform 0.3s ease;
+}
+
+.back-to-top:hover .arrow {
+    transform: translateY(-3px);
+}
+
+/* В светлой теме меняем тень на более мягкую */
+body.light-theme .back-to-top {
+    box-shadow: 0 5px 15px rgba(93, 95, 239, 0.3);
 }
