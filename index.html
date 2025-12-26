@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NovaLab | Digital Agency</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+</head>
+<body data-theme="dark">
+    <a class="skip-link" href="#main">К основному контенту</a>
+
+<header class="header">
+    <div class="container header-container">
+        <div class="logo">⚡️ NOVA<span>LAB</span></div>
+        
+        <nav class="nav" id="navMenu">
+            <a class="nav-link" href="#home">Главная</a>
+            <a class="nav-link" href="#services">Услуги</a>
+            
+            <div class="dropdown">
+                <button class="nav-link dropdown-btn" type="button">
+                    Портфолио <span class="arrow">▾</span>
+                </button>
+                <div class="dropdown-menu">
+                    <a href="#work1">Веб-сайты</a>
+                    <a href="#work2">Брендинг</a>
+                    <a href="#work3">Приложения</a>
+                </div>
+            </div>
+
+            <a class="nav-link" href="#about">О нас</a>
+            
+            <button id="theme-toggle" class="theme-toggle-header" title="Сменить тему" aria-label="Переключить тему">
+                <div class="toggle-circle">
+                    <span class="sun">☀️</span>
+                    <span class="moon">🌙</span>
+                </div>
+            </button>
+        </nav>
+
+        <button class="burger" id="burgerBtn" aria-label="Открыть меню">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </div>
+</header>
+
+    <main id="main">
+        <section id="home" class="hero">
+            <div class="container">
+                <span class="badge">Digital Agency 2025</span>
+                <h1>Будущее вашего бренда начинается здесь</h1>
+                <p>Мы проектируем и разрабатываем современные цифровые продукты, используя мощь Flexbox и чистого кода.</p>
+                <div class="hero-btns">
+                    <a href="#contacts" class="btn btn-primary">Заказать проект</a>
+                    <a href="#services" class="btn btn-outline">Наши работы</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="services" class="services-section">
+            <div class="container">
+                <div class="section-header">
+                    <span class="badge">Наши услуги</span>
+                    <h2>Что мы предлагаем</h2>
+                    <p>Полный спектр digital-решений для вашего бизнеса</p>
+                </div>
+                
+                <div class="services">
+                    <div class="card">
+                        <div class="icon">🎨</div>
+                        <h3>UI/UX Дизайн</h3>
+                        <p>Создаем интуитивные и привлекательные интерфейсы, которые влюбляют пользователей в ваш продукт.</p>
+                    </div>
+                    <div class="card">
+                        <div class="icon">🚀</div>
+                        <h3>Веб-разработка</h3>
+                        <p>Разрабатываем быстрые и современные сайты с использованием передовых технологий и фреймворков.</p>
+                    </div>
+                    <div class="card">
+                        <div class="icon">📱</div>
+                        <h3>Мобильные приложения</h3>
+                        <p>Создаём нативные и кроссплатформенные приложения для iOS и Android с отличным UX.</p>
+                    </div>
+                    <div class="card">
+                        <div class="icon">🎯</div>
+                        <h3>Брендинг</h3>
+                        <p>Разрабатываем запоминающуюся айдентику: от логотипа до полного бренд-бука вашей компании.</p>
+                    </div>
+                    <div class="card">
+                        <div class="icon">⚡</div>
+                        <h3>Digital-маркетинг</h3>
+                        <p>Продвигаем ваш бизнес в интернете: SEO, контекстная реклама, SMM и контент-маркетинг.</p>
+                    </div>
+                    <div class="card">
+                        <div class="icon">💻</div>
+                        <h3>Техподдержка 24/7</h3>
+                        <p>Обеспечиваем бесперебойную работу ваших проектов с круглосуточной технической поддержкой.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="about" class="about-section container">
+            <div class="about-flex">
+                <div class="about-content">
+                    <span class="badge">О студии</span>
+                    <h2>Мы создаем цифровой опыт, который вдохновляет</h2>
+                    <p>NovaLab — это не просто команда разработчиков. Мы стратегические партнеры вашего бизнеса, помогающие трансформировать идеи в прибыльные IT-продукты.</p>
+                    <div class="about-stats">
+                        <div class="stat-item">
+                            <h4>120+</h4>
+                            <p>Проектов</p>
+                        </div>
+                        <div class="stat-item">
+                            <h4>7 лет</h4>
+                            <p>На рынке</p>
+                        </div>
+                        <div class="stat-item">
+                            <h4>24/7</h4>
+                            <p>Поддержка</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-image-box">
+                    <div class="abstract-shape"></div>
+                    <div class="experience-badge">7 лет успеха</div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer" id="contacts">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <button class="footer-title" type="button">О компании</button>
+                    <div class="footer-content">
+                        <p>Мы создаем инновации с 2018 года, помогая бизнесу расти в цифровой среде.</p>
+                    </div>
+                </div>
+
+                <div class="footer-col">
+                    <button class="footer-title" type="button">Навигация</button>
+                    <div class="footer-content">
+                        <a href="#home">Главная</a>
+                        <a href="#services">Услуги</a>
+                        <a href="#about">О нас</a>
+                    </div>
+                </div>
+
+                <div class="footer-col">
+                    <button class="footer-title" type="button">Контакты</button>
+                    <div class="footer-content">
+                        <p>Москва, ул. Дизайна, 1</p>
+                        <p>+7 (999) 123-45-67</p>
+                        <a href="mailto:hello@novalab.ru">hello@novalab.kz</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 NovaLab Digital. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="scripts.js"></script>
+</body>
+</html>
