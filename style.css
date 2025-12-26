@@ -447,8 +447,8 @@ input, textarea {
     border-radius: 25px;
     padding: 2px; /* Толщина рамки */
     background: linear-gradient(135deg, var(--accent-color), transparent, var(--accent-color));
-    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask: linear-gradient(#ffffff, #ffffff) content-box, linear-gradient(#ffffff, #ffffff);
+    mask: linear-gradient(#ffffff, #ffffff) content-box, linear-gradient(#ffffff, #ffffff);
     -webkit-mask-composite: xor;
     mask-composite: exclude;
     opacity: 0.5;
